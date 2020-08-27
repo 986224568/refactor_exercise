@@ -2,11 +2,7 @@ function statement (invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
-  const format = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-  }).format;
+  const format = forMat();
   for (let perf of invoice.performances) {
     const play = plays[perf.playID];
     let thisAmount = 0;
@@ -20,6 +16,16 @@ function statement (invoice, plays) {
 module.exports = {
   statement,
 };
+
+
+function forMat() {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  }).format;
+}
+
 function getResult(play, thisAmount, perf, volumeCredits, result, format, totalAmount) {
   switch (play.type) {
     case 'tragedy':
