@@ -8,8 +8,7 @@ function statement (invoice, plays) {
     let thisAmount = 0;
     ({ thisAmount, volumeCredits, result, totalAmount } = getResult(play, thisAmount, perf, volumeCredits, result, format, totalAmount));
   }
-  result += `Amount owed is ${format(totalAmount / 100)}\n`;
-  result += `You earned ${volumeCredits} credits \n`;
+  result = addAmountCredits(result, format, totalAmount, volumeCredits);
   return result;
 }
 
@@ -17,6 +16,12 @@ module.exports = {
   statement,
 };
 
+
+function addAmountCredits(result, format, totalAmount, volumeCredits) {
+  result += `Amount owed is ${format(totalAmount / 100)}\n`;
+  result += `You earned ${volumeCredits} credits \n`;
+  return result;
+}
 
 function forMat() {
   return new Intl.NumberFormat('en-US', {
