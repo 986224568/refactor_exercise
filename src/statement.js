@@ -1,28 +1,11 @@
 function statement (invoice, plays) {
-  let totalAmount = 0;
-  let volumeCredits = 0;
-  let result = initResult(invoice);
-  const format = forMat();
-  for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
-    let thisAmount = 0;
-    ({ thisAmount, volumeCredits, result, totalAmount } = getInfoFromPerformance(play, thisAmount, perf, volumeCredits, result, format, totalAmount));
-  }
+  var { result, format, totalAmount, volumeCredits } = getData(invoice, plays);
   result = addAmountCredits(result, format, totalAmount, volumeCredits);
   return result;
 }
 
-
 function statementHtml (invoice, plays) {
-  let totalAmount = 0;
-  let volumeCredits = 0;
-  let result = initResultHtml(invoice);
-  const format = forMat();
-  for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
-    let thisAmount = 0;
-    ({ thisAmount, volumeCredits, result, totalAmount } = getInfoFromPerformanceHtml(play, thisAmount, perf, volumeCredits, result, format, totalAmount));
-  }
+  var { result, format, totalAmount, volumeCredits } = getDataHtml(invoice, plays);
   result = addAmountCreditsHtml(result, format, totalAmount, volumeCredits);
   return result;
 }
@@ -46,6 +29,31 @@ module.exports = {
   statementHtml,
 };
 
+function getData(invoice, plays) {
+  let totalAmount = 0;
+  let volumeCredits = 0;
+  let result = initResult(invoice);
+  const format = forMat();
+  for (let perf of invoice.performances) {
+    const play = plays[perf.playID];
+    let thisAmount = 0;
+    ({ thisAmount, volumeCredits, result, totalAmount } = getInfoFromPerformance(play, thisAmount, perf, volumeCredits, result, format, totalAmount));
+  }
+  return { result, format, totalAmount, volumeCredits };
+}
+
+function getDataHtml(invoice, plays) {
+  let totalAmount = 0;
+  let volumeCredits = 0;
+  let result = initResultHtml(invoice);
+  const format = forMat();
+  for (let perf of invoice.performances) {
+    const play = plays[perf.playID];
+    let thisAmount = 0;
+    ({ thisAmount, volumeCredits, result, totalAmount } = getInfoFromPerformanceHtml(play, thisAmount, perf, volumeCredits, result, format, totalAmount));
+  }
+  return { result, format, totalAmount, volumeCredits };
+}
 
 function initResult(invoice) {
   return `Statement for ${invoice.customer}\n`;
