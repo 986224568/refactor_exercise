@@ -1,12 +1,12 @@
 function statement (invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
-  let result = `Statement for ${invoice.customer}\n`;
+  let result = initResult(invoice);
   const format = forMat();
   for (let perf of invoice.performances) {
     const play = plays[perf.playID];
     let thisAmount = 0;
-    ({ thisAmount, volumeCredits, result, totalAmount } = getResult(play, thisAmount, perf, volumeCredits, result, format, totalAmount));
+    ({ thisAmount, volumeCredits, result, totalAmount } = getInfoFromPerformance(play, thisAmount, perf, volumeCredits, result, format, totalAmount));
   }
   result = addAmountCredits(result, format, totalAmount, volumeCredits);
   return result;
@@ -16,6 +16,10 @@ module.exports = {
   statement,
 };
 
+
+function initResult(invoice) {
+  return `Statement for ${invoice.customer}\n`;
+}
 
 function addAmountCredits(result, format, totalAmount, volumeCredits) {
   result += `Amount owed is ${format(totalAmount / 100)}\n`;
@@ -31,7 +35,7 @@ function forMat() {
   }).format;
 }
 
-function getResult(play, thisAmount, perf, volumeCredits, result, format, totalAmount) {
+function getInfoFromPerformance(play, thisAmount, perf, volumeCredits, result, format, totalAmount) {
   thisAmount = getTimeOut(play, thisAmount, perf);
   // add volume credits
   volumeCredits += Math.max(perf.audience - 30, 0);
